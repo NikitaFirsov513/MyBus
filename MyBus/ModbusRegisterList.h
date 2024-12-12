@@ -160,12 +160,34 @@ public:
 		//меняем значение 
 		//убирем редактируем data(убираем лишнее)
 
+		for (int i = indexRegister; i < indexRegister + quantity; i++) {
+
+			auto reg = registers[i].get();
 
 
 
+			if (UInt16Register* uint16Reg = dynamic_cast<UInt16Register*>(reg)) {
+				//достать из data 2 байта
+				//преобразовать
+				//обновить данные в registers для данного регистра
+
+				uint16_t var = (static_cast<uint16_t>(data[0]) << 8) | static_cast<uint16_t>(data[1]);
+				data.erase(data.begin(), data.begin() + 2);
+				dynamic_cast<UInt16Register*>(registers[i].get())->value = var;
 
 
+				continue;
+			}
+
+			if (UInt8Register* uint8Reg = dynamic_cast<UInt8Register*>(reg)) {
+
+				uint8_t var = static_cast<uint16_t>(data[0]);
+				data.erase(data.begin(), data.begin() + 1);
+
+				dynamic_cast<UInt8Register*>(registers[i].get())->value = var;
+
+				continue;
+			}
+		}
 	}
-
-
 };
