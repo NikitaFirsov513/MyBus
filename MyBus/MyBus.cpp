@@ -14,6 +14,7 @@
 
 #include "ModbusRegisterList.h"
 #include "RegisterTypes.h"
+#include "SerialWorker.h"
 
 
 //функция записи в опредленный 1 регистр данных
@@ -42,25 +43,39 @@ int main()
 {
 	setlocale(LC_ALL, "ru");
 
-
+	std::vector<uint8_t> testData = { 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00 };
 
 	ModbusRegisterList registerList; // Создаем список регистров
 
+	std::string portName = "COM3";
+
+	SerialWorker sw(portName, 115200);
 
 
-	// Добавляем регистры разных типов
-	registerList.addRegister(std::make_shared<UInt16Register>(1, 12)); // Целое число
-	registerList.addRegister(std::make_shared<UInt8Register>(3, 8));
-	registerList.addRegister(std::make_shared<UInt16Register>(2, 721)); // Целое число
-	// Целое число
-	//registerList.addRegister(std::make_shared<UInt8Register>(3, 8)); // Целое число
 
-	// Вещественное число
 
-	   // Печатаем регистры
-	registerList.printRegisters();
 
-	registerList.generateBody(1, 3);
+
+
+
+	//// Добавляем регистры разных типов
+	//registerList.addRegister(std::make_shared<UInt16Register>(1, 12));
+	//registerList.addRegister(std::make_shared<UInt16Register>(2, 721));
+	//registerList.addRegister(std::make_shared<UInt8Register>(3, 8));
+
+	//registerList.addRegister(std::make_shared<UInt16Register>(4, 12)); // Целое число
+	//registerList.addRegister(std::make_shared<UInt16Register>(5, 721));
+	//registerList.addRegister(std::make_shared<UInt8Register>(6, 8));
+	//// Целое число
+	////registerList.addRegister(std::make_shared<UInt8Register>(3, 8)); // Целое число
+
+	//// Вещественное число
+
+	//   // Печатаем регистры
+	//registerList.changeList(1, 4, testData);
+	//registerList.printRegisters();
+
+	//registerList.generateBody(1, 3);
 
 
 	return 0;
@@ -185,7 +200,6 @@ std::vector<unsigned char> readFromDevice(HANDLE hComm, size_t bytesToRead) {
 	}
 	return buffer;
 }
-
 
 void printHex(const std::vector<unsigned char>& bytes) {
 	for (unsigned char byte : bytes) {
